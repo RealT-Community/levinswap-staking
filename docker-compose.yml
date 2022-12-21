@@ -1,0 +1,21 @@
+version: '3.2'
+
+services:
+  web:
+    container_name: levinswap-stake
+    build: .
+    ports:
+      - "3002:3000"
+#      - "3002:19000"
+    networks:
+      - traefik-realt
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.levinswap-stake.rule=Host(`stake.levinswap.realt.community`)"
+      - "traefik.http.routers.levinswap-stake.entrypoints=websecure"
+#    stdin_open: true
+    restart: always
+
+networks:
+  traefik-realt:
+    external: true
