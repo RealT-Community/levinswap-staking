@@ -334,13 +334,35 @@ const fetchTokenBalances = async (account: string, addresses: string[]) => {
         addresses.find(a => a === "0x1698cD22278ef6E7c0DF45a8dEA72EDbeA9E42aa"),
         account
     );
-    const balances = await Promise.all<{ result: string; status: string; message: string }>(
-        addresses.map(address => {
-            return fetch(
-                `https://blockscout.com/xdai/mainnet/api?module=account&action=tokenbalance&contractaddress=${address}&address=${account}`
-            ).then(res => res.json());
-        })
-    );
+    // const balances = await Promise.all<{ result: string; status: string; message: string }>(
+    //     addresses.map(address => {
+    //         return fetch(
+    //             `https://blockscout.com/xdai/mainnet/api?module=account&action=tokenbalance&contractaddress=${address}&address=${account}`
+    //         ).then(res => res.json());
+    //     })
+    // );
+
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+
+    const fetchBalances = async (addresses, account) => {
+        const balances: any[] = [];
+
+        for (const address of addresses) {
+            const response = await fetch(
+                `https://api.gnosisscan.io/api?module=account&action=tokenbalance&contractaddress=${address}&address=${account}`
+            );
+
+            const balance = await response.json();
+            balances.push(balance);
+
+            // Introduce a delay of 250 milliseconds (4 fetches per second)
+            await delay(200);
+        }
+
+        return balances;
+    };
+
+    const balances = await fetchBalances(addresses, account);
 
     return balances.map(b => BigNumber.from(b.result));
     // return balances.map(b => ethers.utils.formatEther(BigNumber.from(b.result)));
