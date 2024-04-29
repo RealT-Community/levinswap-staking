@@ -1,7 +1,4 @@
 import React, { useCallback, useEffect, useState } from "react";
-
-import * as Analytics from "expo-firebase-analytics";
-
 import AsyncStorage from "@react-native-community/async-storage";
 import sushiData from "@sushiswap/sushi-data";
 import { ethers } from "ethers";
@@ -14,7 +11,7 @@ import Token from "../types/Token";
 import TokenWithValue from "../types/TokenWithValue";
 import { getContract, isWETH } from "../utils";
 import { logTransaction } from "../utils/analytics-utils";
-import { fetchTokens, fetchTokenWithValue } from "../utils/fetch-utils";
+import { fetchTokens } from "../utils/fetch-utils";
 
 export type OnBlockListener = (block?: number) => void | Promise<void>;
 
@@ -87,7 +84,6 @@ export const EthersContextProvider = ({ children }) => {
                 const accounts = await ethereum.request({ method: "eth_accounts" });
                 if (accounts?.[0]) {
                     setAddress(accounts[0]);
-                    Analytics.setUserId(accounts[0]);
                 } else {
                     setAddress(null);
                 }
