@@ -11,7 +11,7 @@ services:
       - traefik-realt
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.levinswap-stake.rule=Host(`stake.levinswap.realt.community`)"
+      - "traefik.http.routers.levinswap-stake.rule=Host(`stake.levinswap.realtoken.community`)"
       - "traefik.http.routers.levinswap-stake.entrypoints=websecure"
 #    stdin_open: true
     restart: always
